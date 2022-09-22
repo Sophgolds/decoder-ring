@@ -1,33 +1,46 @@
-const substitutionModule = (function () {
+// Please refrain from tampering with the setup code provided here,
+// as the index.html and test files rely on this setup to work properly.
+// Only add code (helper methods, variables, etc.) within the scope
+// of the anonymous function on line 6
 
-  const abc = "abcdefghijklmnopqrstuvwxyz".split("");
-  const decoder = [];
-  function substitution(input, alphabet, encode = true) {
-
-    const noRepeats = new Set(alphabet);
-    if (alphabet === undefined || alphabet.length < 26 || [...noRepeats].length < 26) return false;
+const caesarModule = (function () {
+  // needs to know the alphabet 
+    const letters = "abcdefghijklmnopqrstuvwxyz";
+  
+  function caesar(input, shift, encode = true) {
+      if (shift < -25 || shift > 25 || shift === 0 || shift === undefined)
+    {return false;}
+     
+    let message = "";
+      if (encode === false){
+      shift = shift * -1;}     
+  
+    for (let i = 0; i < input.length; i++){
+      // need to make all lettter lower case
+        const letter = input[i].toLowerCase();
+      
+      if (letters.includes(letter)){
+        const letterIndex = letters.indexOf(letter);
+        let shiftedIndex = letterIndex + shift;
+       
+        if (shiftedIndex > 25){
+          shiftedIndex += -26;
+        }
+        if (shiftedIndex < 0 && shiftedIndex > -25){
+          shiftedIndex += 26;
+        }
         
-    alphabet.split("");
-    if (encode){
-      for (let i = 0; i < 26; i++)
-      {decoder[abc[i]] = alphabet[i]};
-    } 
-    else
-    {for (let i = 0; i < 26; i++)
-      {decoder[alphabet[i]] = abc[i]};
-    }
-    
-    let result = input.toLowerCase().split("").map((letter) => {
-      if (letter === " ") return " ";
-      return decoder[letter]
-    })
-    return result.join("");
+        const shiftedLetter = letters[shiftedIndex];
+        message += shiftedLetter;
+      } 
+      else{
+        message += letter;
+      }
   }
-
-  return {
-    substitution,
-  };
+      return message;
+  }
+  return {caesar,};
 })();
 
-module.exports = { substitution: substitutionModule.substitution };
+module.exports = { caesar: caesarModule.caesar };
 
